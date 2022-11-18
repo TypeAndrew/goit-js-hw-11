@@ -73,7 +73,8 @@ const  getPixplay = function()  {
       galleryEl.innerHTML = createMarckup(response);
       document.querySelector('.load-more').style.opacity = "1";
       totalHits += response.data.length;
-      
+     let lightbox = new SimpleLightbox('.photo-card a', { captionsData: 'alt', captionDelay: 250 });
+      lightbox.show();
       if (totalHits === response.data.totalHits) {
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
       
@@ -83,8 +84,8 @@ const  getPixplay = function()  {
     }).catch((error) => {
       console.log(error);
     });
-    let lightbox = new SimpleLightbox('.gallery', { /* options */ });
-      lightbox.show();
+    
+     
       console.log("SIMPLE");
 } 
 
@@ -110,9 +111,9 @@ galleryEl.addEventListener("click", (event) => {
     if (event.target.nodeName === "img") {
 
 
-        let lightbox = new SimpleLightbox('.gallery', { /* options */ });
+        
 
-        lightbox.show();
+       
 
 
     } else {
