@@ -3,14 +3,12 @@ import SimpleLightbox from "simplelightbox";
 import "simplelightbox/dist/simple-lightbox.min.css";
 import axios from "axios";
 import Notiflix from 'notiflix';
-//let debounce = require('lodash.debounce'); 
 
-//axios.get('/users')
- // .then(res => {
- //   console.log(res.data);
- // });
-const formEl = document.querySelector('.search-form'); 
-const galleryEl = document.querySelector('.gallery'); 
+const formEl = document.querySelector('.search-form');
+formEl.style.background = "blue"; 
+formEl.style.display = "flex";
+formEl.style.justifycontent = "center";
+const galleryEl = document.querySelector('.gallery');  
 //const galleryEl = document.createElement('div');
 //galleryEl.classList.add('gallery');
 //document.body.append(galleryEl);
@@ -21,73 +19,81 @@ document.body.insertAdjacentHTML("afterend", `<button type="button" class="load-
 const btnNext = document.querySelector('.load-more');
 btnNext.style.opacity = "0";
 
-//const inputEl = document.querySelector('input[type=text]');
-//const btnEl = document.querySelector('button[type="submit"]');
-let getPixplay = function () {
-    axios.get(`https://pixabay.com/api/?key=12869198-d37a15061ea84e81a1308e6dd&page=${counter}&q=${formEl[0].value}&per_page=40&image_type=photo&pretty=true`).then((response)=> {
+
+
+const createMarckup = function (response) {
+  
+  response.data.hits.map((element) => {
+
+      
+    markup += `<div class="photo-card">
+              <img src="${element.previewURL}"
+               alt="${element.tags}" loading="lazy" />
+              <div class="info">
+                <p class="info-item">
+                  <b>Likes </b>
+                  <br>${element.likes}</br>
+                </p>
+                <p class="info-item">
+                  <b>Views </b>
+                  <br>${element.views}</br>
+                </p>
+                <p class="info-item">
+                  <b>Comments</b>
+                  <br>${element.comments}</br>
+                </p>
+                <p class="info-item">
+                  <b>Downloads</b>
+                  <br>${element.downloads}</br>
+                </p>
+              </div>
+            </div>`;
+  });
+  
+  return markup;
+} 
+
+const fetchData = async () => {
+  const response = await axios.get(`https://pixabay.com/api/?key=12869198-d37a15061ea84e81a1308e6dd&page=${counter}&q=${formEl[0].value}&per_page=40&image_type=photo&pretty=true`);
+  return response;
+}
+
+const  getPixplay = function()  {
+    
+   fetchData().then((response) => {
     console.log(response.data);
-    console.log(response.status);
-    console.log(response.statusText);
-    console.log(response.headers);
-    console.log(response.config);
+   
     if (response.data.hits.length === 0) {
       Notiflix.Notify.warning('Sorry, there are no images matching your search query. Please try again.');
 
     } else {
       
-      response.data.hits.map((element) => {
-
-      
-      markup += `<div class="photo-card">
-              <img src="${element.previewURL}"
-               alt="${element.tags}" loading="lazy" />
-              <div class="info">
-                <p class="info-item">
-                  <bs>Likes ${element.likes}</b>
-                </p>
-                <p class="info-item">
-                  <b>Views ${element.views}</b>
-                </p>
-                <p class="info-item">
-                  <b>Comments ${element.comments}</b>
-                </p>
-                <p class="info-item">
-                  <b>Downloads ${element.downloads}</b>S
-                </p>
-              </div>
-            </div>`;
-       }) 
-       galleryEl.innerHTML = markup;
+      galleryEl.innerHTML = createMarckup(response);
       document.querySelector('.load-more').style.opacity = "1";
       totalHits += response.data.length;
-      if (totalHits === response.data.totalHits ) {
+      
+      if (totalHits === response.data.totalHits) {
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
       
       } 
      
-      let lightbox = new SimpleLightbox('.photo-card', { /* options */ });
-      lightbox.show();
       
       
-
     }  
     }).catch((error) => {
       console.log(error);
     });
- 
-  
-    //galleryEl.insertAdjacentHTML("afterend", markup);
-    //a = 0;
-    //console.log('hgjhg');
+    let lightbox = new SimpleLightbox('.gallery', { /* options */ });
+      lightbox.show();
+      console.log("SIMPLE");
 } 
-
 
 btnNext.addEventListener("click", () => {
   counter++;
   
   getPixplay();
 
-  console.log("next ok");
+  //console.log("next ok");
   
 });
 
@@ -98,6 +104,21 @@ formEl.addEventListener("submit", (event) => {
   counter = 1;
   getPixplay();
    
+});
+
+galleryEl.addEventListener("click", (event) => {
+    if (event.target.nodeName === "img") {
+
+
+        let lightbox = new SimpleLightbox('.gallery', { /* options */ });
+
+        lightbox.show();
+
+
+    } else {
+        console.log("border!!!!");
+    }
+
 });
 
 window.addEventListener("scroll", () => {
