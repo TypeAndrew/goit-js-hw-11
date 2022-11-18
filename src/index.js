@@ -9,18 +9,22 @@ import Notiflix from 'notiflix';
  // .then(res => {
  //   console.log(res.data);
  // });
-const formEl = document.querySelector('.search-form');  
-const galleryEl = document.createElement('div');
-galleryEl.classList.add('gallery');
-document.body.append(galleryEl);
+const formEl = document.querySelector('.search-form'); 
+const galleryEl = document.querySelector('.gallery'); 
+//const galleryEl = document.createElement('div');
+//galleryEl.classList.add('gallery');
+//document.body.append(galleryEl);
 let markup = "";
+let counter;
+let totalHits = 0;
+document.body.insertAdjacentHTML("afterend", `<button type="button" class="load-more">Load more</button>`);
+const btnNext = document.querySelector('.load-more');
+btnNext.style.opacity = "0";
+
 //const inputEl = document.querySelector('input[type=text]');
 //const btnEl = document.querySelector('button[type="submit"]');
-
-formEl.addEventListener("submit", (event) => {
-    event.preventDefault();
-    
-    axios.get(`https://pixabay.com/api/?key=12869198-d37a15061ea84e81a1308e6dd&q=${formEl[0].value}&image_type=photo&pretty=true`).then((response)=> {
+let getPixplay = function () {
+    axios.get(`https://pixabay.com/api/?key=12869198-d37a15061ea84e81a1308e6dd&page=${counter}&q=${formEl[0].value}&per_page=40&image_type=photo&pretty=true`).then((response)=> {
     console.log(response.data);
     console.log(response.status);
     console.log(response.statusText);
@@ -53,7 +57,16 @@ formEl.addEventListener("submit", (event) => {
               </div>
             </div>`;
        }) 
+       galleryEl.innerHTML = markup;
+      document.querySelector('.load-more').style.opacity = "1";
+      totalHits += response.data.length;
+      if (totalHits === response.data.totalHits ) {
+        Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
       
+      } 
+     
+      let lightbox = new SimpleLightbox('.photo-card', { /* options */ });
+      lightbox.show();
       
       
 
@@ -61,9 +74,39 @@ formEl.addEventListener("submit", (event) => {
     }).catch((error) => {
       console.log(error);
     });
-  galleryEl.innerHTML = markup;
-  let lightbox = new SimpleLightbox('.gallery', { captionsData: 'alt', captionDelay: 250 });
+ 
+  
     //galleryEl.insertAdjacentHTML("afterend", markup);
-    a = 0;
-    console.log('hgjhg');
+    //a = 0;
+    //console.log('hgjhg');
+} 
+
+
+btnNext.addEventListener("click", () => {
+  counter++;
+  
+  getPixplay();
+
+  console.log("next ok");
+  
+});
+
+formEl.addEventListener("submit", (event) => {
+  event.preventDefault();
+  markup = "";
+  totalHits = 0;
+  counter = 1;
+  getPixplay();
+   
+});
+
+window.addEventListener("scroll", () => {
+   const { height: cardHeight } = document
+        .querySelector(".gallery")
+        .firstElementChild.getBoundingClientRect();
+
+      window.scrollBy({
+        top: cardHeight * 2,
+        behavior: "smooth",
+      });
 });
