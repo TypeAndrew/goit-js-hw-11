@@ -7,7 +7,7 @@ import Notiflix from 'notiflix';
 const formEl = document.querySelector('.search-form');
 formEl.style.background = "blue"; 
 formEl.style.display = "flex";
-formEl.style.justifycontent = "center";
+formEl.style.justifyContent = "center";
 const galleryEl = document.querySelector('.gallery');  
 //const galleryEl = document.createElement('div');
 //galleryEl.classList.add('gallery');
@@ -15,8 +15,14 @@ const galleryEl = document.querySelector('.gallery');
 let markup = "";
 let counter;
 let totalHits = 0;
-document.body.insertAdjacentHTML("afterend", `<button type="button" class="load-more">Load more</button>`);
+document.body.insertAdjacentHTML("afterend", `<div class="footer"> <button type="button" class="load-more">Load more</button></div>`);
 const btnNext = document.querySelector('.load-more');
+btnNext.style.background = "blue";
+btnNext.style.position = "relative";
+btnNext.style.left = "50%"
+btnNext.style.color = "yellow"
+//btnNext.style.display = "flex";
+//btnNext.style.justifyContent = "center";
 btnNext.style.opacity = "0";
 
 
