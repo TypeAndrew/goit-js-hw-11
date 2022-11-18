@@ -27,8 +27,10 @@ const createMarckup = function (response) {
 
       
     markup += `<div class="photo-card">
-              <img src="${element.previewURL}"
-               alt="${element.tags}" loading="lazy" />
+              <a class="gallery__item" href="${element.largeImageURL}">
+              <img class="gallery__image" src="${element.previewURL}"
+              
+               alt="${element.tags}" loading="lazy" /></a>
               <div class="info">
                 <p class="info-item">
                   <b>Likes </b>
@@ -77,8 +79,6 @@ const  getPixplay = function()  {
       
       } 
      
-      
-      
     }  
     }).catch((error) => {
       console.log(error);
