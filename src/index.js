@@ -31,8 +31,7 @@ const createMarckup = function (response) {
   
   response.data.hits.map((element) => {
 
-      
-    markup += `<div class="photo-card">
+      markup += `<div class="photo-card">
               <a class="gallery__item" href="${element.largeImageURL}">
               <img class="gallery__image" src="${element.previewURL}"
               
@@ -83,7 +82,7 @@ const  getPixplay = function()  {
       lightbox.show();
       if (totalHits === response.data.totalHits) {
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
-      
+        document.querySelector('.load-more').style.opacity = "0";
       } 
      
     }  
@@ -92,7 +91,7 @@ const  getPixplay = function()  {
     });
     
      
-      console.log("SIMPLE");
+      //console.log("SIMPLE");
 } 
 
 btnNext.addEventListener("click", () => {
@@ -113,20 +112,14 @@ formEl.addEventListener("submit", (event) => {
    
 });
 
-galleryEl.addEventListener("click", (event) => {
+/*galleryEl.addEventListener("click", (event) => {
     if (event.target.nodeName === "img") {
-
-
-        
-
-       
-
 
     } else {
         console.log("border!!!!");
     }
 
-});
+});*/
 
 window.addEventListener("scroll", () => {
    const { height: cardHeight } = document
