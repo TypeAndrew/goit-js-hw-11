@@ -82,7 +82,7 @@ const  getPixplay = function()  {
       lightbox.show();
       if (totalHits === response.data.totalHits) {
         Notiflix.Notify.warning("We're sorry, but you've reached the end of search results.");
-        document.querySelector('.load-more').style.opacity = "0";
+        
       } 
      
     }  
@@ -130,4 +130,11 @@ window.addEventListener("scroll", () => {
         top: cardHeight * 2,
         behavior: "smooth",
       }); 
+  
+  const { scrollHeight, scrollTop, clientHeight } = document.documentElement;
+  console.log(window.scrollY);
+  if (scrollHeight - clientHeight == scrollTop) {
+    //console.log(window);
+    document.querySelector('.load-more').style.opacity = "0";
+  } 
 });
